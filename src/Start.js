@@ -1,8 +1,9 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
 import Image from "./img/start.jpg";
+import { Link } from "react-router-dom";
+import MainPage from "./page/MainPage";
 
 const styles = {
   paperContainer: {
@@ -16,7 +17,7 @@ export default function Start() {
   return (
     <div>
       <div style={styles.paperContainer}></div>
-      <Typography
+      {/* <Typography
         variant="h5"
         align="center"
         sx={{
@@ -27,18 +28,20 @@ export default function Start() {
         }}
       >
         ABC Resturant
-      </Typography>
-      <Button
-        variant="contained"
-        sx={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: `translate(-50%, -50%)`,
-        }}
-      >
-        Start Ordering
-      </Button>
+      </Typography> */}
+      <Link to="/main">
+        <Button
+          variant="contained"
+          sx={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: `translate(-50%, -50%)`,
+          }}
+        >
+          Start Ordering
+        </Button>
+      </Link>
     </div>
   );
 }
