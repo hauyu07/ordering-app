@@ -1,15 +1,14 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Image from "./img/start.jpg";
+import Image from "./img/background.jpeg";
 import { Link } from "react-router-dom";
-import MainPage from "./page/MainPage";
 
 const styles = {
   paperContainer: {
     height: "100vh",
     backgroundImage: `url(${Image})`,
-    opacity: 0.6,
+    opacity: 1,
   },
 };
 
@@ -17,21 +16,23 @@ export default function Start() {
   return (
     <div>
       <div style={styles.paperContainer}></div>
-      {/* <Typography
-        variant="h5"
+      <Typography
+        variant="h4"
         align="center"
         sx={{
           position: "fixed",
-          top: "10%",
+          top: "20%",
           left: "50%",
           transform: `translate(-50%, -50%)`,
+          color: "white",
         }}
       >
-        ABC Resturant
-      </Typography> */}
+        Bon Appetit Cafe
+      </Typography>
       <Link to="/main">
         <Button
-          variant="contained"
+          variant="outlined"
+          color="info"
           sx={{
             position: "fixed",
             top: "50%",
