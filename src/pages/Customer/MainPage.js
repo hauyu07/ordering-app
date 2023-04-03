@@ -4,15 +4,15 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
-import AppBar from "../components/templates/AppBar.js";
-import Appetizer from "../components/modules/Appetizers.js";
-import MainCourse from "../components/modules/MainCourses.js";
-import { useFetch } from "../hooks/useFetch.js";
-import { queryforCategory } from "../firebase";
-import ConfirmOrder from "../components/templates/ConfirmOrderDialog";
-import "../firebase.js";
-import { addOrderedItems } from "../firebase";
-import { getOrderedItems } from "../api/orderedItems.js";
+import AppBar from "../../components/templates/AppBar.js";
+import Appetizer from "../../components/modules/Appetizers.js";
+import MainCourse from "../../components/modules/MainCourses.js";
+import { useFetch } from "../../hooks/useFetch.js";
+import { queryforCategory } from "../../firebase";
+import ConfirmOrder from "../../components/templates/ConfirmOrderDialog";
+import "../../firebase.js";
+import { addOrderedItems } from "../../firebase";
+import { getOrderedItems } from "../../api/orderedItems.js";
 
 export default function MainPage() {
   const [buttonName, setButtonName] = useState("ordered items");

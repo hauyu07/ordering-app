@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Image from "./img/background.jpeg";
+import Image from "../../img/background.jpeg";
 import { Link } from "react-router-dom";
 
 const styles = {

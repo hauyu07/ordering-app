@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import { queryforOrderedItems } from "../firebase";
-import { useFetch } from "../hooks/useFetch";
-import AppBar from "../components/templates/AppBar";
+import { queryforOrderedItems } from "../../firebase";
+import { useFetch } from "../../hooks/useFetch";
+import AppBar from "../../components/templates/AppBar";
 import { Divider, Grid } from "@mui/material";
 
 export default function OrderedItems() {

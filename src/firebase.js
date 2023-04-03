@@ -14,6 +14,14 @@ import {
   onSnapshot,
   limit,
 } from "firebase/firestore";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
+import { Await } from "react-router-dom";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -30,6 +38,7 @@ const firebaseConfig = {
 //**** Initialize Firebase ****//
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore();
+const auth = getAuth(app);
 
 //****  add document to orderedItems  ****//
 export async function addOrderedItems(orderedItem, name) {
@@ -68,6 +77,55 @@ export async function queryforOrderedItems() {
   const orderedItemsQuery = query(collection(firestore, "orderedItems"));
   const querySnapshot = await getDocs(orderedItemsQuery);
   return querySnapshot;
+}
+
+//**** create user ****//
+export async function createUser(email, password) {
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // ..
+    });
+}
+
+export async function loginUser(email, password) {
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function checkState() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      const uid = user.uid;
+      console.log(uid);
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
+}
+
+export function logout() {
+  signOut(auth)
+    .then(() => {
+      // Sign-out successful.
+    })
+    .catch((error) => {
+      // An error happened.
+    });
 }
 
 //TEMPLATES//
