@@ -16,24 +16,32 @@ export default function Login() {
   const [password, setPassword] = useState();
 
   const handleSubmit = async () => {
-    // const user = await loginUser(email, password);
-    const user = { name: name, password: password };
-    const res = await login(user);
-    if (user === "logined") {
-      navigate("/restaurant/main");
-    }
+    const user = await loginUser(email, password);
+    // const user = { name: name, password: password };
+    // const res = await login(user);
+    // if (user === "logined") {
+    //   navigate("/restaurant/main");
+    // }
   };
 
   return (
     <Box component="form" align="center">
       <Typography variant="h4">Bon Appetit Cafe</Typography>
       <Box>
-        <TextField
+        {/* <TextField
           id="Name"
           label="Name"
           variant="outlined"
           onChange={(e) => {
             setName(e.target.value);
+          }}
+        /> */}
+        <TextField
+          id="Email"
+          label="Email"
+          variant="outlined"
+          onChange={(e) => {
+            setEmail(e.target.value);
           }}
         />
       </Box>
