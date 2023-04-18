@@ -22,7 +22,7 @@ const schema = yup.object({
 });
 
 export default function SignUpPage() {
-  const { createUser, user } = useAuth();
+  const { createUser, updateUser, user } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState();
@@ -35,6 +35,7 @@ export default function SignUpPage() {
   };
 
   const signUpUser = (username, restaurantName, token) => {
+    updateUser(restaurantName);
     signUp(username, restaurantName, token).then((res) => {
       if (res.status == 201) {
         console.log("success");
@@ -50,7 +51,7 @@ export default function SignUpPage() {
   };
 
   const emailSignUp = (email, password, username, restaurantName) => {
-    createUser(email, password, username).then(async (res) => {
+    createUser(email, password, restaurantName).then(async (res) => {
       let token = res.user.accessToken;
       signUpUser(username, restaurantName, token);
     });

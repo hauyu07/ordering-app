@@ -32,8 +32,16 @@ export default function ConfirmOrder({
     tempSelectedItems = selectedItems;
   };
   const displayName = (menu, id) => {
+    console.log(menu, id);
     for (let i = 0; i < menu.categories.length; i++) {
-      return menu.categories[i].items.find((item) => item.id == id).name;
+      for (let j = 0; j < menu.categories[i].items.length; j++) {
+        console.log(menu.categories[i].items[j].id, id);
+        if (menu.categories[i].items[j].id === id) {
+          return menu.categories[i].items[j].name;
+        }
+        // console.log(menu.categories[i].items.find((item) => item.id === id));
+        // return menu.categories[i].items.find((item) => item.id === id);
+      }
     }
   };
 

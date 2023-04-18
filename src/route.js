@@ -58,7 +58,7 @@ const routes = [
     element: <OrderPage />,
   },
   {
-    path: "/:customerId",
+    path: "/:customerId/start",
     element: <Start />,
   },
   {

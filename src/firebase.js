@@ -85,21 +85,6 @@ export async function queryforOrderedItems() {
 
 //**** create user ****//
 
-export function updateUser(username) {
-  updateProfile(auth.currentUser, {
-    displayName: username,
-  })
-    .then(() => {
-      console.log("User Updated");
-      // ...
-    })
-    .catch((error) => {
-      const errorMessage = error.message;
-      console.log(errorMessage);
-      // ...
-    });
-}
-
 export const AuthContext = React.createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -113,10 +98,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     return onAuthStateChanged(auth, (user) => {
       if (user) {
-        const { uid, displayName: name, accessToken: token } = user;
+        const { uid, displayName, accessToken: token } = user;
         setUser({
           uid,
-          name,
+          displayName,
           token,
         });
       }
@@ -124,9 +109,12 @@ export const AuthProvider = ({ children }) => {
     });
   }, []);
 
-  const createUser = async (email, password) => {
+  const createUser = async (email, password, restaurantName) => {
     try {
-      return await createUserWithEmailAndPassword(auth, email, password);
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+      console.log(user);
+      logout();
+      return user;
     } catch (error) {
       const errorMessage = error.message;
       console.log(errorMessage);
@@ -136,7 +124,9 @@ export const AuthProvider = ({ children }) => {
 
   const loginUser = async (email, password) => {
     try {
-      return await signInWithEmailAndPassword(auth, email, password);
+      const user = await signInWithEmailAndPassword(auth, email, password);
+      console.log(user);
+      return user;
 
       // const { user } = await signInWithEmailAndPassword(auth, email, password);
       // return user;
@@ -145,7 +135,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const value = { createUser, loginUser, user };
+  const updateUser = async (restaurantName) => {
+    updateProfile(auth.currentUser, {
+      displayName: restaurantName,
+    })
+      .then(() => {
+        console.log("User Updated");
+        // ...
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.log(errorMessage);
+        // ...
+      });
+  };
+
+  const value = { createUser, loginUser, updateUser, user };
 
   return (
     <AuthContext.Provider value={value}>

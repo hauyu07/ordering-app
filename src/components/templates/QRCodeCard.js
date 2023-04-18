@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import QRCode from "react-qr-code";
@@ -6,11 +6,13 @@ import Card from "@mui/material/Card";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 
-export default function QRCodeCard({ table, headCount }) {
+export default function QRCodeCard({ table, headCount, customerId }) {
+  const [value, setValue] = useState(
+    `${window.location.origin}/${customerId}/start`
+  );
   const openCustomerTab = () => {
-    console.log(window.location.origin);
     window.open(
-      `${window.location.origin}/customer`,
+      `${window.location.origin}/${customerId}/start`,
       "_blank",
       "noopener,noreferrer"
     );
@@ -49,7 +51,7 @@ export default function QRCodeCard({ table, headCount }) {
             <Button onClick={openCustomerTab}>
               <QRCode
                 title="Restaurant"
-                value={"test"}
+                value={value}
                 bgColor={"white"}
                 size={200}
               />

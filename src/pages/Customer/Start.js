@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Image from "../../img/background.jpeg";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const styles = {
   paperContainer: {
@@ -13,6 +14,9 @@ const styles = {
 };
 
 export default function Start() {
+  const params = useParams();
+  console.log(params);
+
   return (
     <div>
       <div style={styles.paperContainer}></div>
@@ -29,7 +33,7 @@ export default function Start() {
       >
         Bon Appetit Cafe
       </Typography>
-      <Link to="/main">
+      <Link to={`/${params.customerId}/main`}>
         <Button
           variant="outlined"
           color="info"

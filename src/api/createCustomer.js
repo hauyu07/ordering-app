@@ -6,11 +6,12 @@ export default async function createCustomer(table, headCount, token) {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
         tableNumber: table,
         headCount: headCount,
       }),
     }
-  ).catch((e) => console.log(e));
+  );
 }

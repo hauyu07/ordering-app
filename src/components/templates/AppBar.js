@@ -5,16 +5,18 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function ButtonAppBar({ buttonName }) {
+  const params = useParams();
   const [open, setOpen] = React.useState(false);
 
   const linkTo = () => {
     switch (buttonName) {
       case "ordered items":
-        return "/ordered";
+        return `/${params.customerId}/ordered`;
       case "back to menu":
-        return "/main";
+        return `/${params.customerId}/main`;
       default:
         return null;
     }
@@ -24,10 +26,10 @@ export default function ButtonAppBar({ buttonName }) {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Bon Appetit Cafe
+            Online Ordering System
           </Typography>
-          <Link to={linkTo()}>
-            <Button color="inherit" variant="contained">
+          <Link to={linkTo()} style={{ textDecoration: "none" }}>
+            <Button color="info" variant="contained">
               {buttonName}
             </Button>
           </Link>

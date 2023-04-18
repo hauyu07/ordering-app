@@ -3,7 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
-import Button from "@mui/material/Button";
+import { Button, TextField } from "@mui/material";
 import AppBar from "../../components/templates/AppBar.js";
 import Appetizer from "../../components/modules/Appetizers.js";
 import MainCourse from "../../components/modules/MainCourses.js";
@@ -14,6 +14,8 @@ import "../../firebase.js";
 import { addOrderedItems } from "../../firebase";
 import getOrderedItems from "../../api/getOrderedItems.js";
 import getMenu from "../../api/getMenu.js";
+import { useNavigate, useParams } from "react-router-dom";
+import Filter from "../../components/templates/Filter.js";
 
 export default function MainPage() {
   const [buttonName, setButtonName] = useState("ordered items");
@@ -23,16 +25,7 @@ export default function MainPage() {
   const [noItem, setNoItem] = useState(true);
   const [open, setOpen] = React.useState(false);
 
-  // const renderTab = () => {
-  //   switch (value) {
-  //     case 0:
-  //       return <Appetizer addAmount={addAmount} />;
-  //     case 1:
-  //       return <MainCourse addAmount={addAmount} />;
-  //     default:
-  //       return null;
-  //   }
-  // };
+  const params = useParams();
 
   const [data, setData] = useState({
     tableNumber: "2",
@@ -137,7 +130,7 @@ export default function MainPage() {
   };
 
   const { data: menu, isLoading } = useFetch(() =>
-    getMenu("", "08b4e72d-abeb-482b-bb7f-ebde8c2a0d28", "customer")
+    getMenu("", params.customerId, "customer")
   );
 
   if (isLoading) {
@@ -154,6 +147,7 @@ export default function MainPage() {
           ))}
         </Tabs>
       </Box>
+      {/* <Filter /> */}
       {menu.categories[value].items.map((p, i) => (
         <Box
           key={i}
@@ -193,7 +187,7 @@ export default function MainPage() {
             clearItem={clearItem}
             addAmount={addAmount}
             subtractAmount={subtractAmount}
-            id={"08b4e72d-abeb-482b-bb7f-ebde8c2a0d28"}
+            id={params.customerId}
             data={data}
             menu={menu}
           />

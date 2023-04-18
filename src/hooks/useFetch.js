@@ -25,12 +25,11 @@ export const useFetch = (fetcher) => {
   // }, []);
 
   useEffect(() => {
-    fetcher()
-      .then((res) => {
-        console.log("returned data: ", res);
-        setData(res);
-      })
-      .then(() => setIsLoading(false));
+    fetcher().then((res) => {
+      console.log("returned data: ", res);
+      setData(res);
+      setIsLoading(false);
+    });
   }, []);
 
   return { data, isLoading };

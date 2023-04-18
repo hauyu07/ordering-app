@@ -18,13 +18,14 @@ export default function TablePage() {
   const [num, setNum] = useState();
   const [table, setTable] = useState();
   const [step, setStep] = useState(null);
+  const [customerId, setCustomerId] = useState();
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const generateQRcode = () => {
-    setNum(Math.floor(Math.random() * 101));
+    setNum(customerId);
   };
 
   const renderFormStep = (step) => {
@@ -39,11 +40,18 @@ export default function TablePage() {
           setStep={setStep}
           setHeadCount={setHeadCount}
           token={user.token}
+          setCustomerId={setCustomerId}
         />
       );
     }
     if (step === 2) {
-      return <QRCodeCard table={table} headCount={headCount} />;
+      return (
+        <QRCodeCard
+          table={table}
+          headCount={headCount}
+          customerId={customerId}
+        />
+      );
     }
   };
 

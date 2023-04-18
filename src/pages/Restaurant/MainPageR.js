@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { Link } from "react-router-dom";
 import AppBarR from "../../components/templates/AppBarR";
+import getMenu from "../../api/getMenu";
+import getMenuList from "../../api/getMenuList";
+import { useAuth } from "../../firebase";
 
 export default function MainPage() {
+  const { user } = useAuth();
+  const [name, setName] = useState();
+
+  // useEffect(() => {
+  //   getMenuList(user.token).then((res) => {
+  //     getMenu(user.token, res[0].id).then((res) => {
+  //       setName(res.restaurant.name);
+  //     });
+  //   });
+  // });
   return (
     <Box>
       <AppBarR></AppBarR>

@@ -13,7 +13,13 @@ const schema = yup.object({
   headCount: yup.number().required(),
 });
 
-export default function HeadCountForm({ table, setStep, setHeadCount, token }) {
+export default function HeadCountForm({
+  table,
+  setStep,
+  setHeadCount,
+  token,
+  setCustomerId,
+}) {
   const handleSubmit = () => {};
 
   const formik = useFormik({
@@ -21,13 +27,17 @@ export default function HeadCountForm({ table, setStep, setHeadCount, token }) {
       headCount: "",
     },
     validationSchema: schema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setHeadCount(values.headCount);
       const num = Number(values.headCount);
-      createCustomer(table, num, token).then((res) => {
-        console.log(res.text());
-      });
-      //setStep(2);
+      createCustomer(table, num, token)
+        .then((res) => res.text())
+        .then((text) => {
+          text = text.substring(15, text.length - 2);
+          console.log(text);
+          setCustomerId(text);
+          setStep(2);
+        });
     },
   });
   return (

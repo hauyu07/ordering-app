@@ -6,13 +6,15 @@ import ListItemText from "@mui/material/ListItemText";
 import getOrderedItems from "../../api/getOrderedItems";
 import { useFetch } from "../../hooks/useFetch";
 import AppBar from "../../components/templates/AppBar";
-import { Divider, Grid } from "@mui/material";
+import { Divider, Grid, Paper, Typography, Box } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function OrderedItems() {
+  const params = useParams();
   const [buttonName, setButtonName] = useState("back to menu");
 
   const { data: orderedItems, isLoading } = useFetch(() =>
-    getOrderedItems("", "customer", "08b4e72d-abeb-482b-bb7f-ebde8c2a0d28")
+    getOrderedItems("", "customer", params.customerId)
   );
 
   if (isLoading) {
@@ -21,31 +23,90 @@ export default function OrderedItems() {
   return (
     <div>
       <AppBar buttonName={buttonName} />
-      <ListItem>
-        <Grid container>
-          <Grid item xs={9}>
-            <ListItemText>Ordered Items</ListItemText>
-          </Grid>
-          <Grid item xs={3}>
-            <ListItemText>Price</ListItemText>
-          </Grid>
-        </Grid>
-      </ListItem>
-      <Divider />
-      <List>
-        {orderedItems.map((p, i) => (
-          <ListItem key={i}>
+      {orderedItems.map((p, idx) => (
+        <Paper sx={{ p: 1, m: 1 }} elevation={3}>
+          <ListItem>
             <Grid container>
-              <Grid item xs={10}>
-                <ListItemText key={i}>{p.id}</ListItemText>
+              <Grid item xs={7}>
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <ListItemText>Ordered Items</ListItemText>
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <ListItemText>Quantity</ListItemText>
+                </Box>
               </Grid>
               <Grid item xs={2}>
-                <ListItemText key={i}>{p.totalPrice}</ListItemText>
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <ListItemText>Price</ListItemText>
+                </Box>
               </Grid>
             </Grid>
           </ListItem>
-        ))}
-      </List>
+          <Divider />
+          <List>
+            {orderedItems[idx].items.map((p, i) => (
+              <ListItem key={i}>
+                <Grid container>
+                  <Grid item xs={8}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ListItemText key={i}>{p.name}</ListItemText>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ListItemText key={i}>{p.quantity}</ListItemText>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ListItemText key={i}>
+                        {p.price * p.quantity}
+                      </ListItemText>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+      ))}
+      <Grid container>
+        <Grid item xs={5}></Grid>
+        <Grid item xs={4}>
+          <Box sx={{ display: "flex", justifyContent: "right", pr: 2, m: 2 }}>
+            <Typography>Total Price:</Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={2}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "right",
+              pr: 2,
+              m: 2,
+            }}
+          >
+            <Typography>{orderedItems[0].totalPrice}</Typography>
+          </Box>
+        </Grid>
+      </Grid>
     </div>
   );
 }

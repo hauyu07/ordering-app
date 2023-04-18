@@ -25,22 +25,29 @@ export default function MenuSelectionPage() {
   const [open, setOpen] = useState();
   const [checked, setChecked] = useState();
 
+  console.log(isLoading);
+
   const handleChange = (id) => {
     setChecked(id);
     getMenu(user.token, id).then((res) => {
-      if (checked == "true") {
-        res.active = true;
-        updateMenu(id, res, user.token);
-      } else {
-        res.active = false;
-        updateMenu(id, res, user.token);
-      }
+      res.active = true;
+      updateMenu(id, res, user.token);
+      // if (checked == "true") {
+      //   console.log(res.active);
+      //   res.active = true;
+      //   console.log(res.active);
+      //   updateMenu(id, res, user.token);
+      // } else {
+      //   res.active = false;
+      //   updateMenu(id, res, user.token);
+      // }
     });
   };
 
   if (isLoading) {
     return null;
   }
+
   return (
     <Box>
       <AppBarR></AppBarR>
@@ -50,7 +57,7 @@ export default function MenuSelectionPage() {
             Active Menu
           </Typography>
         </Box>
-        {menuList.map((p, i) => (
+        {menuList?.map((p, i) => (
           <Paper key={i} elevation={3} sx={{ p: 1, m: 1 }}>
             <Box
               key={i}
