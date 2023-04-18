@@ -159,7 +159,7 @@ export default function MainPage() {
           }}
         >
           <Button
-            variant="contained"
+            variant="outlined"
             key={i}
             onClick={() => {
               addAmount(p, p.id);
@@ -169,12 +169,14 @@ export default function MainPage() {
           </Button>
         </Box>
       ))}
-      <Box>
+      <Box sx={{ pl: 2 }}>
         <Button
           onClick={() => {
             setOpen(true);
           }}
           disabled={noItem}
+          variant="contained"
+          color="info"
         >
           Confirm Order
         </Button>
