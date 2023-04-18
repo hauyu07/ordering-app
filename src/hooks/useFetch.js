@@ -12,14 +12,23 @@ export const useFetch = (fetcher) => {
   //   console.log(data);
   // }, []);
 
+  // useEffect(() => {
+  //   let tempArray = [];
+  //   fetcher()
+  //     .then((res) => {
+  //       res.forEach((snap) => {
+  //         tempArray = tempArray.concat(snap.data());
+  //       });
+  //       setData(tempArray);
+  //     })
+  //     .then(() => setIsLoading(false));
+  // }, []);
+
   useEffect(() => {
-    let tempArray = [];
     fetcher()
       .then((res) => {
-        res.forEach((snap) => {
-          tempArray = tempArray.concat(snap.data());
-        });
-        setData(tempArray);
+        console.log("returned data: ", res);
+        setData(res);
       })
       .then(() => setIsLoading(false));
   }, []);

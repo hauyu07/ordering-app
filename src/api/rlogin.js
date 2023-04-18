@@ -1,6 +1,9 @@
 export default function login(data) {
-  return fetch("https://sdpdb-api.herokuapp.com/rsignin", {
+  return fetch("", {
     method: "POST",
     body: JSON.stringify(data),
-  }).then((res) => res.json());
+  }).then((res) => {
+    res.json();
+    console.log("login: ", res);
+  });
 }

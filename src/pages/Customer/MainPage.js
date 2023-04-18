@@ -12,7 +12,8 @@ import { queryforCategory } from "../../firebase";
 import ConfirmOrder from "../../components/templates/ConfirmOrderDialog";
 import "../../firebase.js";
 import { addOrderedItems } from "../../firebase";
-import { getOrderedItems } from "../../api/orderedItems.js";
+import getOrderedItems from "../../api/getOrderedItems.js";
+import getMenu from "../../api/getMenu.js";
 
 export default function MainPage() {
   const [buttonName, setButtonName] = useState("ordered items");
@@ -22,88 +23,122 @@ export default function MainPage() {
   const [noItem, setNoItem] = useState(true);
   const [open, setOpen] = React.useState(false);
 
-  const renderTab = () => {
-    switch (value) {
-      case 0:
-        return <Appetizer addAmount={addAmount} />;
-      case 1:
-        return <MainCourse addAmount={addAmount} />;
-      default:
-        return null;
-    }
-  };
+  // const renderTab = () => {
+  //   switch (value) {
+  //     case 0:
+  //       return <Appetizer addAmount={addAmount} />;
+  //     case 1:
+  //       return <MainCourse addAmount={addAmount} />;
+  //     default:
+  //       return null;
+  //   }
+  // };
+
+  const [data, setData] = useState({
+    tableNumber: "2",
+    items: [],
+  });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const addAmount = (data) => {
-    const updatedSelectedItems = [...selectedItems];
-    const updatingItem = updatedSelectedItems.find(
-      (item) => data.name === item.name
-    );
-    if (updatingItem) {
-      updatingItem.amount += 1;
-    } else {
-      updatedSelectedItems.push({ ...data, amount: 1 });
-      console.log(selectedItems);
+  const addAmount = (res, id) => {
+    // const updatedSelectedItems = [...selectedItems];
+    // const updatingItem = updatedSelectedItems.find(
+    //   (item) => data.name === item.name
+    // );
+    // if (updatingItem) {
+    //   updatingItem.amount += 1;
+    // } else {
+    //   updatedSelectedItems.push({ ...data, amount: 1, id: id });
+    //   console.log(selectedItems);
+    //   setNoItem(false);
+    // }
+    // setSelectedItems(updatedSelectedItems);
+    // setData({
+    //   tableNumber: "",
+    //   items: [{ menuItemId: "", quantity: "", remarks: "" }],
+    // });
+
+    const index = data.items.findIndex((item) => item.menuItemId == id);
+    let temp = { ...data };
+    if (index == -1) {
+      temp.items.push({ menuItemId: res.id, quantity: 1, remarks: "" });
+      setData(temp);
       setNoItem(false);
+      console.log(data);
+    } else {
+      temp.items[index].quantity += 1;
+      setData(temp);
+      setNoItem(false);
+      console.log(data);
     }
-    setSelectedItems(updatedSelectedItems);
   };
 
-  const subtractAmount = (data, i) => {
-    const updatedSelectedItems = [...selectedItems];
-    const updatingItem = updatedSelectedItems.find(
-      (item) => data.name === item.name
-    );
-    if (data.amount === 1) {
-      updatedSelectedItems.splice(i, 1);
+  const subtractAmount = (res, id) => {
+    // const updatedSelectedItems = [...selectedItems];
+    // const updatingItem = updatedSelectedItems.find(
+    //   (item) => data.name === item.name
+    // );
+    // if (data.amount === 1) {
+    //   updatedSelectedItems.splice(i, 1);
+    // } else {
+    //   updatingItem.amount -= 1;
+    //   console.log(selectedItems);
+    // }
+    // if (updatedSelectedItems.length === 0) {
+    //   setNoItem(true);
+    //   setOpen(false);
+    // }
+    // setSelectedItems(updatedSelectedItems);
+    const index = data.items.findIndex((item) => item.menuItemId == id);
+    const getValue = data.items.find((item) => item.menuItemId == id);
+    let temp = { ...data };
+    if (getValue.quantity === 1) {
+      temp.items.splice(index, 1);
+      setData(temp);
+      console.log(data);
     } else {
-      updatingItem.amount -= 1;
-      console.log(selectedItems);
+      temp.items[index].quantity -= 1;
+      setData(temp);
+      console.log(data);
     }
-    if (updatedSelectedItems.length === 0) {
+    if (data.items.length === 0) {
       setNoItem(true);
       setOpen(false);
     }
-    setSelectedItems(updatedSelectedItems);
   };
 
   const clearItem = () => {
-    const tempOrderedItems = [...orderedItems];
-    const tempSelectedItems = [...selectedItems];
-    tempOrderedItems.forEach((ordereditem) => {
-      const checkExisted = tempSelectedItems.find(
-        (selecteditem) => selecteditem.name === ordereditem.name
-      );
-
-      if (checkExisted) {
-        ordereditem.amount += checkExisted.amount;
-        const index = tempSelectedItems.findIndex(() => checkExisted);
-        tempSelectedItems.splice(index, 1);
-      }
-    });
-
-    const updatedOrderedItems = [...tempOrderedItems, ...tempSelectedItems];
-    updatedOrderedItems.forEach((item) => {
-      const docData = item;
-      addOrderedItems(item, item.name);
-    });
-
-    setSelectedItems([]);
-    getOrderedItems(setOrderedItems);
-  };
-
-  const openDialog = () => {
-    setOpen(true);
+    // const tempOrderedItems = [...orderedItems];
+    // const tempSelectedItems = [...selectedItems];
+    // tempOrderedItems.forEach((ordereditem) => {
+    //   const checkExisted = tempSelectedItems.find(
+    //     (selecteditem) => selecteditem.name === ordereditem.name
+    //   );
+    //   if (checkExisted) {
+    //     ordereditem.amount += checkExisted.amount;
+    //     const index = tempSelectedItems.findIndex(() => checkExisted);
+    //     tempSelectedItems.splice(index, 1);
+    //   }
+    // });
+    // const updatedOrderedItems = [...tempOrderedItems, ...tempSelectedItems];
+    // updatedOrderedItems.forEach((item) => {
+    //   const docData = item;
+    //   addOrderedItems(item, item.name);
+    // });
+    // setSelectedItems([]);
+    // getOrderedItems(setOrderedItems);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const { data: menuCategory, isLoading } = useFetch(queryforCategory);
+  const { data: menu, isLoading } = useFetch(() =>
+    getMenu("", "08b4e72d-abeb-482b-bb7f-ebde8c2a0d28", "customer")
+  );
 
   if (isLoading) {
     return null;
@@ -114,17 +149,36 @@ export default function MainPage() {
       <AppBar buttonName={buttonName} />
       <Box>
         <Tabs value={value} onChange={handleChange}>
-          {menuCategory.map((p, i) => (
+          {menu.categories.map((p, i) => (
             <Tab label={p.name} key={i} />
           ))}
         </Tabs>
       </Box>
-      <Box>{renderTab()}</Box>
-
+      {menu.categories[value].items.map((p, i) => (
+        <Box
+          key={i}
+          sx={{
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            p: 2,
+            minWidth: 300,
+          }}
+        >
+          <Button
+            variant="contained"
+            key={i}
+            onClick={() => {
+              addAmount(p, p.id);
+            }}
+          >
+            {p.name}
+          </Button>
+        </Box>
+      ))}
       <Box>
         <Button
           onClick={() => {
-            openDialog();
+            setOpen(true);
           }}
           disabled={noItem}
         >
@@ -139,6 +193,9 @@ export default function MainPage() {
             clearItem={clearItem}
             addAmount={addAmount}
             subtractAmount={subtractAmount}
+            id={"08b4e72d-abeb-482b-bb7f-ebde8c2a0d28"}
+            data={data}
+            menu={menu}
           />
         </Dialog>
       </Box>

@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { logout } from "../../firebase";
 
-export default function AppBarR({ buttonName }) {
+export default function AppBarR() {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -17,12 +17,13 @@ export default function AppBarR({ buttonName }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Bon Appetit Cafe
           </Typography>
-          <Link to="/restaurant/main">
+          <Link to="/restaurant/main" style={{ textDecoration: "none" }}>
             <Button color="inherit" variant="contained">
               Main Page
             </Button>
           </Link>
-          <Link to="/restaurant/login">
+          <Box width={10}></Box>
+          <Link to="/restaurant/login" style={{ textDecoration: "none" }}>
             <Button
               color="inherit"
               variant="contained"

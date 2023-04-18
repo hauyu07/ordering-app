@@ -1,28 +1,35 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import currentOrder from "../../api/currentOrder";
 import AppBarR from "../../components/templates/AppBarR";
 import Typography from "@mui/material/Typography";
+import getOrderList from "../../api/getOrderList";
+import { useAuth } from "../../firebase";
+import Card from "@mui/material/Card";
+import { useFetch } from "../../hooks/useFetch";
 
 export default function OrderPage() {
-  const [data, setData] = useState();
+  const { user } = useAuth();
 
-  async function fetchData() {
-    const res = await currentOrder();
-    setData(JSON.stringify(res));
+  const { data: orderList, isLoading } = useFetch(() =>
+    getOrderList(user.token)
+  );
+
+  if (isLoading) {
+    return null;
   }
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  console.log(data);
 
   return (
     <Box>
       <AppBarR />
       <Box sx={{ m: 6 }}>
-        <Typography>{data}</Typography>
+        {orderList.map((p, i) => (
+          <Card>
+            <Typography>{p.id}</Typography>
+            <Typography>{p.numberOfItems}</Typography>
+            <Typography>{p.totalPrice}</Typography>
+            <Typography>{p.createdAt}</Typography>
+          </Card>
+        ))}
       </Box>
     </Box>
   );

@@ -20,8 +20,12 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  getIdToken,
+  updateCurrentUser,
+  updateProfile,
 } from "firebase/auth";
-import { Await } from "react-router-dom";
+import { Await, useNavigate, useLocation } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -80,43 +84,101 @@ export async function queryforOrderedItems() {
 }
 
 //**** create user ****//
-export async function createUser(email, password) {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in
-      const user = userCredential.user;
+
+export function updateUser(username) {
+  updateProfile(auth.currentUser, {
+    displayName: username,
+  })
+    .then(() => {
+      console.log("User Updated");
       // ...
     })
     .catch((error) => {
-      const errorCode = error.code;
       const errorMessage = error.message;
-      // ..
+      console.log(errorMessage);
+      // ...
     });
 }
 
-export async function loginUser(email, password) {
-  try {
-    const { user } = await signInWithEmailAndPassword(auth, email, password);
-    return user;
-  } catch (error) {
-    console.log(error);
-  }
-}
+export const AuthContext = React.createContext();
 
-export function checkState() {
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      const uid = user.uid;
-      console.log(uid);
-      // ...
-    } else {
-      // User is signed out
-      // ...
+export const useAuth = () => useContext(AuthContext);
+
+export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const [user, setUser] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { uid, displayName: name, accessToken: token } = user;
+        setUser({
+          uid,
+          name,
+          token,
+        });
+      }
+      setIsLoading(false);
+    });
+  }, []);
+
+  const createUser = async (email, password) => {
+    try {
+      return await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      const errorMessage = error.message;
+      console.log(errorMessage);
+      // ..
     }
-  });
-}
+  };
+
+  const loginUser = async (email, password) => {
+    try {
+      return await signInWithEmailAndPassword(auth, email, password);
+
+      // const { user } = await signInWithEmailAndPassword(auth, email, password);
+      // return user;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const value = { createUser, loginUser, user };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {isLoading ? null : children}
+    </AuthContext.Provider>
+  );
+};
+
+// export async function loginUser(email, password) {
+//   try {
+//     const { user } = await signInWithEmailAndPassword(auth, email, password);
+//     return user;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
+// export async function checkState() {
+//   return await onAuthStateChanged(auth, async (user) => {
+//     if (user) {
+//       // User is signed in, see docs for a list of available properties
+//       // https://firebase.google.com/docs/reference/js/firebase.User
+//       const uid = user.uid;
+//       const token = await getIdToken(user);
+//       console.log(uid, token);
+//       return token;
+//       // ...
+//     } else {
+//       // User is signed out
+//       // ...
+//     }
+//   });
+// }
 
 export function logout() {
   signOut(auth)

@@ -1,13 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import AppBarR from "../../components/templates/AppBarR";
 import Button from "@mui/material/Button";
 import ChairAltIcon from "@mui/icons-material/ChairAlt";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
+import HeadCountForm from "../../components/templates/HeadCountForm";
+import QRCodeCard from "../../components/templates/QRCodeCard";
+import { useAuth } from "../../firebase";
 
 export default function TablePage() {
+  const { user } = useAuth();
   const numbers = [4, 4, 2, 4, 4, 2, 4, 4, 2];
+  const [headCount, setHeadCount] = useState();
+  const [open, setOpen] = useState(false);
+  const [num, setNum] = useState();
+  const [table, setTable] = useState();
+  const [step, setStep] = useState(null);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const generateQRcode = () => {
+    setNum(Math.floor(Math.random() * 101));
+  };
+
+  const renderFormStep = (step) => {
+    if (!step) {
+      return;
+    }
+
+    if (step === 1) {
+      return (
+        <HeadCountForm
+          table={table}
+          setStep={setStep}
+          setHeadCount={setHeadCount}
+          token={user.token}
+        />
+      );
+    }
+    if (step === 2) {
+      return <QRCodeCard table={table} headCount={headCount} />;
+    }
+  };
 
   return (
     <Box>
@@ -24,6 +62,12 @@ export default function TablePage() {
                     display: "flex",
                     flexDirection: "column",
                   }}
+                  onClick={() => {
+                    generateQRcode();
+                    setTable(index + 1);
+                    setStep(1);
+                    setOpen(true);
+                  }}
                 >
                   <Typography>Table {index + 1}</Typography>
                   <div>
@@ -37,6 +81,9 @@ export default function TablePage() {
           ))}
         </Grid>
       </Box>
+      <Dialog onClose={handleClose} open={open}>
+        {renderFormStep(step)}
+      </Dialog>
     </Box>
   );
 }

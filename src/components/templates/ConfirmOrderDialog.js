@@ -7,6 +7,7 @@ import { ListItemIcon } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import Grid from "@mui/material/Grid";
+import createOrder from "../../api/createOrder";
 
 export default function ConfirmOrder({
   setNoItem,
@@ -16,27 +17,42 @@ export default function ConfirmOrder({
   clearItem,
   subtractAmount,
   addAmount,
+  id,
+  data,
+  menu,
 }) {
+  const postOrder = (id, body) => {
+    console.log(body);
+    createOrder("", id, "customer", body);
+  };
   const tempSelectedItems = [...selectedItems];
   const cancelItem = (i) => {
     tempSelectedItems.splice(i, 1);
     setSelectedItems(tempSelectedItems);
     tempSelectedItems = selectedItems;
   };
+  const displayName = (menu, id) => {
+    for (let i = 0; i < menu.categories.length; i++) {
+      return menu.categories[i].items.find((item) => item.id == id).name;
+    }
+  };
+
   return (
     <div>
       <List>
-        {tempSelectedItems.map((p, i) => (
+        {data.items.map((p, i) => (
           <ListItem key={i}>
             <Grid container>
               <Grid item xs={7}>
-                <ListItemText key={i}>{p.name}</ListItemText>
+                <ListItemText key={i}>
+                  {displayName(menu, p.menuItemId)}
+                </ListItemText>
               </Grid>
               <Grid item xs={2}>
                 <Button>
                   <ListItemIcon
                     onClick={() => {
-                      subtractAmount(tempSelectedItems[i], i);
+                      subtractAmount(p, p.menuItemId);
                     }}
                   >
                     <RemoveIcon />
@@ -44,12 +60,12 @@ export default function ConfirmOrder({
                 </Button>
               </Grid>
               <Grid item xs={1}>
-                <ListItemText>{p.amount}</ListItemText>
+                <ListItemText>{p.quantity}</ListItemText>
               </Grid>
               <Grid item xs={2}>
                 <Button
                   onClick={() => {
-                    addAmount(tempSelectedItems[i]);
+                    addAmount(p, p.menuItemId);
                   }}
                 >
                   <ListItemIcon>
@@ -66,6 +82,7 @@ export default function ConfirmOrder({
           setNoItem(true);
           setOpen(false);
           clearItem();
+          postOrder(id, data);
         }}
       >
         Confirm Order
