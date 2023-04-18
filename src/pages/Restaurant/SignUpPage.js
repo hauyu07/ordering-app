@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Collapse from "@mui/material/Collapse";
 import Snackbar from "@mui/material/Snackbar";
+import { Paper } from "@mui/material";
 
 const schema = yup.object({
   email: yup.string().required(),
@@ -78,7 +79,7 @@ export default function SignUpPage() {
   return (
     <Box>
       <form onSubmit={formik.handleSubmit}>
-        <Card sx={{ minWidth: 275 }}>
+        <Paper sx={{ minWidth: 275, p: 3, m: 3 }} elevation={3}>
           <Snackbar
             anchorOrigin={{
               vertical: "top",
@@ -135,7 +136,7 @@ export default function SignUpPage() {
               Sign Up
             </Button>
           </Box>
-        </Card>
+        </Paper>
       </form>
       <Box sx={{ display: "flex", justifyContent: "center", p: 1, m: 1 }}>
         <Link to="/restaurant" style={{ textDecoration: "none" }}>

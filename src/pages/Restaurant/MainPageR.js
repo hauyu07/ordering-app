@@ -39,12 +39,12 @@ export default function MainPage() {
             <Button variant="outlined">Order Tracking</Button>
           </Link>
         </Grid>
-        <Grid item xs={12} textAlign="center">
+        {/* <Grid item xs={12} textAlign="center">
           <Button variant="outlined">Inventory Management</Button>
         </Grid>
         <Grid item xs={12} textAlign="center">
           <Button variant="outlined">Reports</Button>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   );
