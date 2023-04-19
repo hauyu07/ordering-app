@@ -165,7 +165,7 @@ export default function MainPage() {
               addAmount(p, p.id);
             }}
           >
-            {p.name}
+            {p.name} ${p.price}
           </Button>
         </Box>
       ))}

@@ -31,7 +31,7 @@ export default function Start() {
           color: "white",
         }}
       >
-        Bon Appetit Cafe
+        Online Ordering System
       </Typography>
       <Link to={`/${params.customerId}/main`}>
         <Button
